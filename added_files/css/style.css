@@ -1,0 +1,98 @@
+p {
+	text-align: justify;
+}
+.uu-header-title {
+	font-family: 'Open Sans',sans-serif !important;
+}
+.uu-container h1 {
+	color: white;
+}
+.panel {
+	border: none;
+}
+.year li {
+	list-style: none;
+}
+.year a {
+	color: #cc0000;
+}
+.year {
+	border-bottom: 1px solid #E1E1E1;
+}
+#footer {
+	background-color: #333;
+	color: white;
+	padding: 10px 0;
+}
+#footer ul {
+	margin-bottom: 0px;
+}
+.copyright {
+	font-size: 0.8em;
+}
+#footer a {
+	color: white;
+}
+.regis {
+    color: #a72121;
+    text-decoration: underline;
+}
+.sam_logo {
+	width: 50px;
+	height:50px;
+	margin-right: 10px;
+}
+.my {
+	display: flex;
+	justify-content: space-around;
+}
+.btn:hover {
+	cursor: initial;
+	background-color: #C00;
+}
+.btn:focus {
+	background-color: #C00;
+	outline: none;
+	border: none;
+}
+.btn:active {
+	background-color: #C00;
+}
+
+#footer .container center:first-child{
+	color: #9E9E9E;
+    font-weight: bolder;
+}
+#footer .container center:nth-child(3){
+	color: #737272;
+}
+#footer .container center:nth-child(3) a{
+	color: #aba7a7;
+}
+.vk {
+	float: left;
+	margin-right: 3%;
+	height: 200px;
+}
+.mssg {
+	display: inline-block;
+}
+@media only screen and (min-width: 480px) {
+	.mssg {width: 72%}
+}
+.visit ul a {
+    padding: 0px;
+    color: white !important;
+    margin-left: 20px;
+}
+.visit ul {
+    background-color: #333;
+    padding: 10px;
+}
+.visit ul a:focus {
+    background-color: initial;
+}
+.visit ul a:hover {
+    background-color: initial;
+    text-decoration: underline;
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>P.T.A.A. - Maps and Directions</title>
+    <link rel="shortcut icon" href="../_images/favicon.ico" type="image/x-icon">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 95%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      .mode1 {
+        top: 10px !important;
+        left: 60% !important;
+      }
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      #right-panel {
+        height: 100%;
+        float: right;
+        width: 28.6%;
+        overflow: auto;
+      }
+      #map {
+        /*margin-right: 400px;*/
+      }
+      #floating-panel {
+        background: #fff;
+        padding: 5px;
+        font-size: 14px;
+        font-family: Arial;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+        /*display: none;*/
+      }
+      @media print {
+        #map {
+          height: 500px;
+          margin: 0;
+        }
+        #right-panel {
+          float: none;
+          width: auto;
+        }
+      }
+      @media only screen and (max-width: 543px) {
+              #right-panel {
+                width: 100%;
+                float: none;
+              }
+              .mode2 {
+                position: absolute;
+                top: 112% !important;
+              }
+      }
+      @media only screen and (min-width: 543px){
+        .mode2 {
+          top: 50px;
+        }
+      }
+      .mode2 {
+        left: 2%;
+      }
+    </style>
+  </head>
+  <body>
+   
+    <div id="right-panel"></div>
+    <div id="map"></div>
+     <div id="floating-panel" class="mode1">
+      <strong>Start:</strong>
+      <select id="start">
+        <option value="yourLoc">Your Location</option>    
+       <option value="Mumbai, in">Mumbai</option>    
+      <option value="New Delhi, in">New Delhi</option>    
+      <option value="Kolkata, in">Kolkata</option>    
+      <option value="Chennai, in">Chennai</option>    
+      <option value="Indore, in">Indore</option>    
+      <option value="Hyderabad, in">Hyderabad</option>    
+      <option value="Pune, in">Pune</option>    
+      <option value="Bhopal, in">Bhopal</option>    
+      <option value="Ahemdabad, in">Ahemdabad</option>    
+      <option value="Jaipur, in">Jaipur</option>    
+      <option value="Bengluru, in">Bengluru</option>
+      </select>
+      <br>
+      <strong>End:</strong>
+      <select id="end">
+        <option value="Pantnagar, in">Pantnagar</option> 
+        <option value="Mumbai, in">Mumbai</option>       
+      <option value="New Delhi, in">New Delhi</option>    
+      <option value="Kolkata, in">Kolkata</option>    
+      <option value="Chennai, in">Chennai</option>    
+      <option value="Indore, in">Indore</option>    
+      <option value="Hyderabad, in">Hyderabad</option>    
+      <option value="Pune, in">Pune</option>    
+      <option value="Bhopal, in">Bhopal</option>    
+      <option value="Ahemdabad, in">Ahemdabad</option>    
+      <option value="Jaipur, in">Jaipur</option>    
+      <option value="Bengluru, in">Bengluru</option>    
+      </select>
+    </div>
+    <div id="floating-panel" class="mode2">
+    <b>Mode of Travel: </b>
+    <select id="mode">
+      <option value="DRIVING">Driving</option>
+      <option value="TRANSIT">Railway</option>
+    </select>
+    </div>
+    <script>
+    var start1;
+      function initMap() {
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var directionsService = new google.maps.DirectionsService;
+        var loc= {lat: 29.0210, lng: 79.4897};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: loc
+        });
+        var marker = new google.maps.Marker({
+          position: loc,
+          map: map,
+          title: 'Destination'
+        });
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById('right-panel'));
+
+        var control = document.getElementById('floating-panel');
+        control.style.display = 'block';
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+        if (navigator.geolocation)
+        {
+          navigator.geolocation.getCurrentPosition(function(position){
+          start1 = {lat: position.coords.latitude, lng: position.coords.longitude};
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+          });
+       }
+          var onChangeHandler = function() {
+            calculateAndDisplayRoute(directionsService, directionsDisplay);
+        };
+        // document.getElementById('start').value='Ahemdabad, in';
+        document.getElementById('start').addEventListener('change', onChangeHandler);
+        document.getElementById('end').addEventListener('change', onChangeHandler);
+        document.getElementById('mode').addEventListener('change', onChangeHandler);
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        var start;
+        if(document.getElementById('start').value=="yourLoc"){if (navigator.geolocation)start = start1; else window.alert("Can't get your location");}
+        else start = document.getElementById('start').value;
+        var loc= {lat: 29.0210, lng: 79.4897};
+        var end = document.getElementById('end').value;
+        // console.log(start);
+        directionsService.route({
+          origin: start,
+          destination: end,
+          travelMode: document.getElementById('mode').value,
+          transitOptions: {
+          modes: ['RAIL'],
+          }
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            if(status=="ZERO_RESULTS"){
+              window.alert('Can\'t get any Railway service from your location. Please select the nearest location from the options gives');
+            }
+            else window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA40y3y98pheMuKuBc9_VngmsTMVDnkv8Q&callback=initMap">
+    </script>
+  </body>
+</html>
